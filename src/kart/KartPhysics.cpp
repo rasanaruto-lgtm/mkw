@@ -114,6 +114,25 @@ void KartPhysics::addMainRot(const EGG::Quatf& q) {
   this->mpDynamics->mainRot = res;
 }
 
+// nonmatching (~31%): formula confirmed (movingVel += (vel - movingVel) * rate),
+// but the target allocates a 0x20 frame and spills the deltas/products while our
+// build stays frameless, so the register allocation diverges. See kpsweep.py.
+void KartPhysics::setMovingRoadVel(const EGG::Vector3f& vel, f32 rate) {
+  EGG::Vector3f delta = vel;
+  delta -= movingRoadVel;
+  delta *= rate;
+  movingRoadVel += delta;
+  mpDynamics->movingRoadVel = movingRoadVel;
+}
+
+void KartPhysics::setMovingWaterVel(const EGG::Vector3f& vel, f32 rate) {
+  EGG::Vector3f delta = vel;
+  delta -= movingWaterVel;
+  delta *= rate;
+  movingWaterVel += delta;
+  mpDynamics->movingWaterVel = movingWaterVel;
+}
+
 void KartPhysics::decayMovingRoadVel(f32 normalRate, f32 airRate, bool touchingGround) {
   this->movingRoadVel.x *= touchingGround ? normalRate : airRate;
   this->movingRoadVel.y *= touchingGround ? normalRate : airRate;

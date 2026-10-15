@@ -78,7 +78,7 @@ void AI::update() {
     }
 }
 
-const EGG::Vector2f& AI::getStick() const {
+const EGG::Vector2f& AI::getStick() {
     if (isCpu()) {
         return mCpuStick;
     }
@@ -112,12 +112,12 @@ bool AI::isGhost() {
     return System::RaceConfig::spInstance->mRaceScenario.getPlayerType(getPlayerIdx()) == System::RaceConfig::Player::TYPE_GHOST;
 }
 
-bool AI::isSameTeam(const AI& other) {
+bool AI::isSameTeam(AI* other) {
     if (mTeam < 0) {
         return false;
     }
 
-    return mTeam == other.mTeam;
+    return mTeam == other->mTeam;
 }
 
 void AI::endRace() {

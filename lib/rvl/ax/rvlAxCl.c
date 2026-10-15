@@ -18,3 +18,28 @@ u16 _unk_803864e6;
 u16 _unk_803864e4;
 u16 _unk_803864e2;
 u16 _unk_803864e0;
+
+u32 __AXGetCommandListCycles() { return _unk_803864ec; }
+
+void AXSetMode(u32 mode) { _unk_803864f0 = mode; }
+
+u32 AXGetMode() { return _unk_803864f0; }
+
+u16 AXGetAuxAReturnVolume() { return _unk_803864e4; }
+
+u16 AXGetAuxBReturnVolume() { return _unk_803864e2; }
+
+u16 AXGetAuxCReturnVolume() { return _unk_803864e0; }
+
+void AXSetAuxAReturnVolume(u16 vol) { _unk_803864e4 = vol; }
+
+void AXSetAuxBReturnVolume(u16 vol) { _unk_803864e2 = vol; }
+
+void AXSetAuxCReturnVolume(u16 vol) { _unk_803864e0 = vol; }
+
+void AXSetMasterVolume(u32 vol) {
+  if (vol > 0x8000) {
+    vol = 0x8000;
+  }
+  _unk_803864e6 = vol;
+}

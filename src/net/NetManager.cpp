@@ -607,3 +607,10 @@ FriendJoinableStatus NetManager::getFriendJoinableStatus(u32 friendIdx) const {
 }
 
 } // namespace Net
+
+extern "C" {
+
+void fn_1_148544() {}
+void fn_1_148564() {}
+
+}

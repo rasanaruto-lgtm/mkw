@@ -77,6 +77,9 @@ void KPADSetDistParam(s32, f64, f64);
 void KPADReset(void);
 s32 KPADRead(s32, KPADStatus [], u32);
 
+void KPADEnableDPD(s32);
+void KPADDisableDPD(s32);
+
 #ifdef __cplusplus
 }
 #endif

@@ -73,6 +73,12 @@ typedef struct WPADInfo {
   u8 firmware;
 } WPADInfo;
 
+typedef void (*WPADCallback)(s32 chan, s32 result);
+
+void WPADControlMotor(s32 chan, u32 cmd);
+s32 WPADGetInfoAsync(s32 chan, WPADInfo* info, WPADCallback callback);
+BOOL WPADIsDpdEnabled(s32 chan);
+
 #ifdef __cplusplus
 }
 #endif

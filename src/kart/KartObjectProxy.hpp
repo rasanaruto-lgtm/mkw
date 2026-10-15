@@ -84,8 +84,8 @@ class KartObjectProxy {
 public:
   KartObjectProxy();
 
-  KartSettings* kartSettings();
-  const KartSettings* kartSettings() const;
+  inline KartSettings* kartSettings() { return mAccessor->kartSettings; }
+  inline const KartSettings* kartSettings() const { return mAccessor->kartSettings; }
   KartPhysics* kartPhysics();
   const KartPhysics* kartPhysics() const;
   KartDynamics* kartDynamics();
@@ -119,6 +119,9 @@ public:
   // dunno why this specifically is inline, but that's what it appears
   KartState* kartState() { return mAccessor->mKartState; }
   const KartState* kartState() const { return mAccessor->mKartState; }
+  KartState* kartStateReload() {
+    return *(KartState* volatile*)&mAccessor->mKartState;
+  }
 
   KartParam* kartParam() const;
   KartStats* kartStats() const;
@@ -163,9 +166,7 @@ public:
   void setBodyAngle(f32 angle);
   void setStartBoostIdx(s32 idx);
   const EGG::Vector3f& getWheelEdgePos(u32 wheelIdx);
-  System::KPad* getInput();
   bool isLocal();
-  bool isCpu();
   bool isGhost();
   void getBodyForward(EGG::Vector3f& out);
   s32 getHopStickX();

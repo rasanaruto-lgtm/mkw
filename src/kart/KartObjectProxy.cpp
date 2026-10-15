@@ -79,9 +79,6 @@ const EGG::Vector3f& KartObjectProxy::getWheelEdgePos(u32 wheelIdx) {
   return kartWheel(wheelIdx)->getPhysics()->wheelEdgePos;
 }
 
-KartSettings* KartObjectProxy::kartSettings() { return mAccessor->kartSettings; }
-
-const KartSettings* KartObjectProxy::kartSettings() const { return mAccessor->kartSettings; }
 KartPhysics* KartObjectProxy::kartPhysics() { return mAccessor->mBody->getPhysics(); }
 
 const KartPhysics* KartObjectProxy::kartPhysics() const { return mAccessor->mBody->getPhysics(); }
@@ -90,15 +87,11 @@ KartDynamics* KartObjectProxy::kartDynamics() { return mAccessor->mBody->getPhys
 
 const KartDynamics* KartObjectProxy::kartDynamics() const { return mAccessor->mBody->getPhysics()->mpDynamics; }
 
-System::KPad* KartObjectProxy::getInput() {
-  return System::RaceManager::spInstance->players[kartSettings()->playerIdx]->kpadPlayer;
-}
-
 bool KartObjectProxy::isLocal() {
   return kartState()->on(KART_FLAG_LOCAL);
 }
 
-bool KartObjectProxy::isCpu() {
+bool KartObjectProxy::isCpu() const {
   return kartState()->on(KART_FLAG_CPU);
 }
 
@@ -178,6 +171,8 @@ s32 KartObjectProxy::getAppliedHopStickX() {
 }
 
 KartModel* KartObjectProxy::kartModel() { return mAccessor->mModel; }
+
+u8 KartObjectProxy::getPlayerIdx() const { return mAccessor->kartSettings->playerIdx; }
 
 f32 KartObjectProxy::getVehicleSpeed() { return kartMove()->speed(); }
 
@@ -274,3 +269,83 @@ const KartHalfPipe* KartObjectProxy::kartHalfPipe() {
 const KartJump* KartObjectProxy::kartJump() { return kartMove()->kartJump(); }
 
 } // namespace Kart
+
+extern "C" {
+
+void* PlayerPointers_getVehicle(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x0);
+  return *(u8**)(b + 0x4);
+}
+
+void* PlayerPointers_isBike(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x0);
+  return *(u8**)(b + 0x0);
+}
+
+void* PlayerPointers_getRacedataFactoryFlags(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x3C);
+  return *(u8**)(b + 0x10);
+}
+
+void* PlayerPointers_getOobWipeState(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x4);
+  return *(u8**)(b + 0x90);
+}
+
+void* various_stuff_get_kart_parts_disp_params(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x0);
+  return *(u8**)(b + 0x20);
+}
+
+void* various_stuff_get_bike_parts_disp_params(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x0);
+  return *(u8**)(b + 0x24);
+}
+
+void* PlayerPointers_getKartDriverDispParams(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x0);
+  return *(u8**)(b + 0x1C);
+}
+
+void* PlayerPointers_getVehicleType(void* self) {
+  u8* p = *(u8**)((u8*)self + 0x0);
+  p = *(u8**)(p + 0x0);
+  p = *(u8**)(p + 0x14);
+  p = *(u8**)(p + 0x0);
+  return *(u8**)(p + 0x4);
+}
+
+void* PlayerPointers_getMalCol2(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x8);
+  u8* c = *(u8**)(b + 0x90);
+  return c + 0xE4;
+}
+
+void* PlayerPointers_getPlayerPhysicsHolderPosition(void* self) {
+  u8* a = *(u8**)((u8*)self + 0x0);
+  u8* b = *(u8**)(a + 0x8);
+  u8* c = *(u8**)(b + 0x90);
+  return c + 0x18;
+}
+
+void fn_1_800C0() {}
+void fn_1_801B8() {}
+void fn_1_80298() {}
+void fn_1_80A88() {}
+void fn_1_80AA0() {}
+void fn_1_80AB8() {}
+void fn_1_80AD0() {}
+void fn_1_80AEC() {}
+void fn_1_80BB8() {}
+void fn_1_813E8() {}
+void fn_1_81494() {}
+
+}

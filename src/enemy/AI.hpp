@@ -22,13 +22,13 @@ namespace Enemy {
         virtual ~AI();
         void init();
         void update();
-        const EGG::Vector2f& getStick() const;
+        const EGG::Vector2f& getStick();
         bool isCPU();
         bool isRealLocal();
         bool isRealLocalAndCPU();
         bool isAICPU();
         bool isGhost();
-        bool isSameTeam(const AI&);
+        bool isSameTeam(AI*);
         void endRace();
         void onOutOfBounds(const System::MapdataJugemPoint&);
         void forceRecalculation(bool);

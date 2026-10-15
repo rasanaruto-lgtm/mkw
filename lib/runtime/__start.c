@@ -14,6 +14,7 @@ u8 __debug_bba;
 // Extern function references.
 extern int main(int argc, char* argv[]);
 extern void InitMetroTRK_BBA(void);
+extern void InitMetroTRK(void);
 
 static u32 __OSPADButton AT_ADDRESS(0x800030e4);
 
@@ -91,8 +92,8 @@ lbl_8000610c:
   bl __set_debug_bba;
   b lbl_80006148;
 lbl_80006138:
-  lis r6, 0x8002;
-  addi r6, r6, -15540;
+  lis r6, InitMetroTRK@ha;
+  addi r6, r6, InitMetroTRK@l;
   mtlr r6;
   blrl;
 lbl_80006148:

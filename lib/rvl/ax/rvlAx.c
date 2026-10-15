@@ -16,3 +16,16 @@ u32 _unk_80386488;
 
 // Symbol: AXIsInit
 u32 AXIsInit() { return _unk_80386488; }
+
+void AXInit() {
+  if (_unk_80386488 == 0) {
+    OSRegisterVersion(_unk_803857f8);
+    __AXAllocInit();
+    __AXVPBInit();
+    __AXSPBInit();
+    __AXAuxInit();
+    __AXClInit();
+    __AXOutInit(0);
+    _unk_80386488 = 1;
+  }
+}

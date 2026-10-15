@@ -268,3 +268,27 @@ void KartCollide::processCannon(u32* colTypeMask) {
   }
 }
 }
+
+extern "C" {
+
+u16 Object_getId(void* self) { return *(u16*)((u8*)self + 0x88); }
+
+void fn_1_6096C() {}
+
+int fn_1_63010() { return 2; }
+int fn_1_63018() { return 0; }
+int fn_1_63020() { return 1; }
+int fn_1_63028() { return 3; }
+int fn_1_63030() { return 8; }
+int fn_1_63038() { return 4; }
+int fn_1_631F8() { return 9; }
+int fn_1_63200() { return 0xC; }
+int fn_1_63220() { return 0xE; }
+int fn_1_63228() { return 0x10; }
+int fn_1_63230() { return 7; }
+
+u32 fn_1_63164(void* self) { return *(u32*)((u8*)self + 0xAC); }
+
+int PlayerSub18_handleNoopCollision() { return -1; }
+
+}

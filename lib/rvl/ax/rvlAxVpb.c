@@ -35,3 +35,7 @@ extern void* __s_AXITD;
 u32 __AXGetNumVoices() { return __AXNumVoices; }
 
 AXPB* __AXGetPBs() { return __AXPB; }
+
+void AXSetMaxDspCycles(u32 cycles) { __AXMaxDspCycles = cycles; }
+
+u32 AXGetMaxVoices() { return __AXMaxVoices; }

@@ -231,3 +231,25 @@ void RaceManagerPlayer::updateGpRankScore() {
 }
 }
 #endif
+
+extern "C" {
+
+void fn_1_22CD8() {}
+void fn_1_232EC() {}
+void fn_1_23834() {}
+void fn_1_252E4() {}
+void fn_1_25360() {}
+void fn_1_25B3C() {}
+void fn_1_25C9C() {}
+void fn_1_26DF0() {}
+
+int fn_1_26F00() { return 0xD; }
+int fn_1_26FD4() { return 0xA; }
+int fn_1_270A8() { return 6; }
+int fn_1_2717C() { return 6; }
+int fn_1_27250() { return 4; }
+int fn_1_27324() { return 2; }
+
+void fn_1_24908(void* self) { *(u32*)((u8*)self + 0x38) |= 0x10u; }
+
+}

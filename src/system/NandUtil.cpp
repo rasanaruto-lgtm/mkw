@@ -153,3 +153,289 @@ void unk_8052bd38(void* first) {
   u16 tmp[4];
   NandUtil_getStatus(first, &tmp[0]);
 }
+
+int NandUtil_createDir(const char* a1, u8 a2) {
+  int v3; // r27
+  int v4; // r26
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDCreateDir(a1, a2, 0)) {
+    case 0:
+    case -6:
+      v4 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    case -4:
+      v4 = 6;
+      break;
+    case -1:
+      v4 = 3;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}
+
+int NandUtil_getStatus(void* a1, void* a2) {
+  int v3; // r27
+  int v4; // r26
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDGetStatus((const char*)a1, (NANDStatus*)a2)) {
+    case 0:
+      v4 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    case -12:
+      v4 = 4;
+      break;
+    case -4:
+      v4 = 6;
+      break;
+    case -1:
+      v4 = 3;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}
+
+int NandUtil_setStatus(const char* a1, const NANDStatus* a2) {
+  int v3; // r27
+  int v4; // r26
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDSetStatus(a1, a2)) {
+    case 0:
+      v4 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    case -12:
+      v4 = 4;
+      break;
+    case -4:
+      v4 = 6;
+      break;
+    case -1:
+      v4 = 3;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}
+
+int NandUtil_getType(const char* a1, u32* a2) {
+  int v3; // r31
+  int v4; // r30
+  u8 type;
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDGetType(a1, &type)) {
+    case 0:
+      v4 = 0;
+      if (type == 1)
+        *a2 = 1;
+      else
+        *a2 = 2;
+      break;
+    case -12:
+      v4 = 0;
+      *a2 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    case -1:
+      v4 = 3;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}
+
+int NandUtil_create(const char* a1, u8 a2) {
+  int v3; // r27
+  int v4; // r26
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDCreate(a1, a2, 0)) {
+    case 0:
+    case -6:
+      v4 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    case -4:
+      v4 = 6;
+      break;
+    case -1:
+      v4 = 3;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}
+
+int NandUtil_check(u32 a1, u32 a2, u32* a3) {
+  int v3; // r27
+  int v4; // r26
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDCheck(a1, a2, a3)) {
+    case 0:
+      v4 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}
+
+int NandUtil_getLength(NANDFileInfo* a1, u32* a2) {
+  int v3; // r27
+  int v4; // r26
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDGetLength(a1, a2)) {
+    case 0:
+      v4 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    case -4:
+      v4 = 6;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}
+
+int NandUtil_delete(const char* a1) {
+  int v3; // r27
+  int v4; // r26
+
+  v3 = 1;
+  v4 = 8;
+  for (int v1 = 0; v1 < 3; ++v1) {
+    switch (NANDDelete(a1)) {
+    case 0:
+    case -12:
+      v4 = 0;
+      break;
+    case -3:
+    case -2:
+      if (v1 >= 3)
+        v4 = 2; // not reached
+      else
+        v3 = 0;
+      break;
+    case -4:
+      v4 = 6;
+      break;
+    case -1:
+      v4 = 3;
+      break;
+    default:
+      v4 = 8;
+      break;
+    }
+    if (v3)
+      break;
+    OSSleepTicks(OSMillisecondsToTicks(100ll));
+  }
+  return v4;
+}

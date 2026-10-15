@@ -11,7 +11,39 @@
 #include <rvl/wpad/wpad.h>
 namespace System {
 
-class KPadGhostButtonsStream;
+class KPadGhostButtonsStream {
+public:
+  virtual ~KPadGhostButtonsStream() {}              // [vt+0x08]
+  virtual u16 readFrame() { return 0; }             // [vt+0x0c]
+  virtual u32 getSequenceSize() { return 0; }       // [vt+0x10]
+  virtual bool writeFrame(u8 frame) { return false; } // [vt+0x14]
+
+  u8* mBuffer;   // [this+0x04]
+  s32 mFrame;    // [this+0x08]
+  u32 mSize;     // [this+0x0c]
+  u16 _10;       // [this+0x10]
+  u16 _12;       // [this+0x12]
+  s32 mState;    // [this+0x14]
+};
+
+class KPadFaceButtonsStream : public KPadGhostButtonsStream {
+public:
+  ~KPadFaceButtonsStream();
+  u32 getSequenceSize() override;
+};
+
+class KPadTrickButtonsStream : public KPadGhostButtonsStream {
+public:
+  ~KPadTrickButtonsStream();
+  u32 getSequenceSize() override;
+};
+
+class KPadDirectionButtonsStream : public KPadGhostButtonsStream {
+public:
+  ~KPadDirectionButtonsStream();
+  u32 getSequenceSize() override;
+};
+
 class KPadRecorder;
 class KPadWiiControllerData;
 class RumbleManager;
@@ -142,7 +174,7 @@ public:
   virtual void startMotor();                      // [vt+0x18]
   virtual void stopMotor();                       // [vt+0x1c]
   virtual void stopMotorHard() {}                 // [vt+0x20]
-  virtual double getStreamSize();                 // [vt+0x24]
+  virtual f32 getStreamSize();                 // [vt+0x24]
   virtual void setDpdEnabled(bool enabled);       // [vt+0x28]
   virtual bool isDpdEnabled();                    // [vt+0x2c]
   virtual void updateBatteryStatus();             // [vt+0x30]
@@ -219,8 +251,7 @@ public:
   eControlSource mControlSource;                  // [this+0x8dc]
   WPADInfo mWpadInfo;                             // [this+0x8e0]
   u16 _8f8;
-  u8 _8fa;
-  u8 _8fb;
+  u16 _8fa;
   u16 _8fc;
   u16 _8fe;
   int mWpadType;                                  // [this+0x900]
@@ -276,11 +307,11 @@ public:
                  KPadUIInputState* uiInputState) override;
 
   eControlSource getControlSource() override;     // [vt+0x10]
-  double getStreamSize() override;                // [vt+0x24]
+  f32 getStreamSize() override;                // [vt+0x24]
   void setDriftIsAuto(bool isAuto) override;      // [vt+0x38]
   void reset(bool driftIsAuto) override;          // [vt+0x44]
 
-  bool hasGhostBuffer() const;
+  bool hasGhostBuffer();
   void readGhostBuffer(u16* buttonsData, bool isAuto);
 
 public:

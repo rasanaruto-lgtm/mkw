@@ -240,7 +240,7 @@ asm GHIRecvResult ghiDoReceive(GHIConnection* connection, char buffer[],
 loc1:
   bl current_time;
   lwz r4, 348(r31);
-  lwz r0, -30244(r13);
+  lwz r0, ghiThrottleTimeDelay(r13);
   add r0, r4, r0;
   cmplw r3, r0;
   bge loc3;
@@ -249,7 +249,7 @@ loc2:
   b loc25;
 loc3:
   stw r3, 348(r31);
-  lwz r0, -30248(r13);
+  lwz r0, ghiThrottleBufferSize(r13);
   cmpw r30, r0;
   bge loc5;
 loc4:

@@ -46,3 +46,17 @@ void Page::skipOutAnimation(void) {
 }
 
 }
+
+extern "C" {
+
+void Page_onInit() {}
+void fn_1_F1FA4() {}
+void fn_1_F1FD8() {}
+void fn_1_F2094() {}
+
+void fn_1_F296C(void* self, u32 a, u32 b) {
+    *(u32*)((u8*)self + 0x3C) = a;
+    *(u32*)((u8*)self + 0x40) = b;
+}
+
+}

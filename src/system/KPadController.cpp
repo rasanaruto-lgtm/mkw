@@ -1,5 +1,7 @@
 #include "KPadController.hpp"
 
+#include <string.h>
+
 #include <system/KPadDirector.hpp>
 
 namespace System {
@@ -100,5 +102,194 @@ void KPadRaceInputState::setTrick(eTrick trick) {
     }
   }
   mTrick = actualTrick;
+}
+
+void KPadController::setDriftIsAuto(bool isAuto) {
+  mDriftIsAuto = isAuto;
+}
+
+void KPadController::setDpdEnabled(bool enabled) {}
+
+void KPadController::startMotor() {}
+
+void KPadController::stopMotor() {}
+
+u32 KPadController::getBatteryLevelAsync() { return 2; }
+
+int KPadController::getChan() { return -1; }
+
+bool KPadController::isRumbleEnabled() { return false; }
+
+bool KPadController::isDpdEnabled() { return false; }
+
+int KPadGCController::getChan() { return mChan; }
+
+int KPadWiiController::getChan() { return mChan; }
+
+eControlSource KPadWiiController::getControlSource() { return mControlSource; }
+
+eControlSource KPadGhostController::getControlSource() {
+  return CONTROL_SOURCE_GAMECUBE;
+}
+
+u16* KPadPlayer::getRecordedBuffer() { return mRecordedBuffer; }
+
+u32 KPadPlayer::getRecordedBufferSize() { return mRecordedBufferSize; }
+
+void KPadGCController::startMotor() { PADControlMotor(mChan, 1); }
+
+void KPadGCController::stopMotor() { PADControlMotor(mChan, 0); }
+
+void KPadGCController::stopMotorHard() { PADControlMotor(mChan, 2); }
+
+void KPadWiiController::startMotor() { WPADControlMotor(mChan, 1); }
+
+void KPadWiiController::stopMotor() { WPADControlMotor(mChan, 0); }
+
+void KPadWiiController::stopMotorHard() { stopMotor(); }
+
+bool KPadWiiController::isRumbleEnabled() { return mType == 2; }
+
+bool KPadGhostController::hasGhostBuffer() { return mGhostBuffer != nullptr; }
+
+void KPadGhostController::setDriftIsAuto(bool isAuto) {}
+
+void KPad::startMotor() { mController->startMotor(); }
+
+void KPad::stopMotor() { mController->stopMotor(); }
+
+void KPad::stopMotorHard() { mController->stopMotorHard(); }
+
+void KPad::setInputState(KPadRaceInputState* raceInputState) {}
+
+void KPadController::reset(bool driftIsAuto) {
+  setDriftIsAuto(driftIsAuto);
+  mRaceInputState.reset();
+}
+
+void KPadGCController::reset(bool driftIsAuto) {
+  setDriftIsAuto(driftIsAuto);
+  mRaceInputState.reset();
+  memset(&mPadStatus, 0, 0xC);
+  _a8 = 0;
+  _aa = false;
+  _ac = 0;
+}
+
+extern "C" void fn_1_235630(void*, u8);
+
+void KPadWiiController::reset(bool driftIsAuto) {
+  setDriftIsAuto(driftIsAuto);
+  mRaceInputState.reset();
+  memset(&mKpadStatuses[0], 0, 0x840);
+  mType = 4;
+  mControlSource = (eControlSource)-1;
+  _8f8 = 0;
+  _8fa = 0;
+  mClassicIsInDrift = false;
+  _8fc = 0;
+  _906 = 4;
+  mPointerPos.x = 0.0f;
+  mPointerPos.y = 0.0f;
+  mPointerHorizontal.y = 0.0f;
+  mPointerHorizontal.x = 0.0f;
+  mPointerDist = 0.0f;
+  fn_1_235630(mWiiControllerData, mDriftIsAuto);
+}
+
+bool KPadControllerInfo::Addr::operator==(const Addr& rhs) const {
+  for (int i = 0; i < 6; i++) {
+    if (mBytes[i] != rhs.mBytes[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+void KPadWiiController::raceToUIInputFreestyle(KPadUIInputState* dst,
+                                               KPadRaceInputState* src) {
+  u16 buttons = src->mButtonsRaw;
+  u16 out = 0;
+  if (buttons & 0x900)
+    out |= 0x1;
+  if (buttons & 0x600)
+    out |= 0x2;
+  if (buttons & 0x10)
+    out |= 0x4;
+  if (buttons & 0x8)
+    out |= 0x8;
+  if (buttons & 0x4)
+    out |= 0x10;
+  if (buttons & 0x1)
+    out |= 0x20;
+  if (buttons & 0x2)
+    out |= 0x40;
+  if (buttons & 0x8000)
+    out |= 0x80;
+  if (buttons & 0x5000)
+    out |= 0x100;
+  dst->mButtons = out;
+  dst->mButtonsRaw = src->mButtonsRaw;
+  u8 xRaw = src->mStickXRaw;
+  dst->mStickXRaw = xRaw;
+  dst->mStick.x = KPadDirector::spInstance->mIsMirror ? -rawStickToFloat(xRaw)
+                                                      : rawStickToFloat(xRaw);
+  u8 yRaw = src->mStickYRaw;
+  dst->mStickYRaw = yRaw;
+  dst->mStick.y = rawStickToFloat(yRaw);
+}
+
+void KPadWiiController::raceToUIInputCore(KPadUIInputState* dst,
+                                          KPadRaceInputState* src) {
+  u16 buttons = src->mButtonsRaw;
+  u16 out = 0;
+  if (buttons & 0x900)
+    out |= 0x1;
+  if (buttons & 0x600)
+    out |= 0x2;
+  if (buttons & 0x10)
+    out |= 0x4;
+  if (buttons & 0x2)
+    out |= 0x8;
+  if (buttons & 0x1)
+    out |= 0x10;
+  if (buttons & 0x8)
+    out |= 0x20;
+  if (buttons & 0x4)
+    out |= 0x40;
+  if (buttons & 0x8000)
+    out |= 0x80;
+  if (buttons & 0x1000)
+    out |= 0x100;
+  dst->mButtons = out;
+  dst->mButtonsRaw = src->mButtonsRaw;
+}
+
+f32 KPadController::getStreamSize() { return 0.0f; }
+
+u32 KPadFaceButtonsStream::getSequenceSize() { return 2; }
+
+u32 KPadTrickButtonsStream::getSequenceSize() { return 2; }
+
+u32 KPadDirectionButtonsStream::getSequenceSize() { return 2; }
+
+KPadFaceButtonsStream::~KPadFaceButtonsStream() {}
+
+KPadTrickButtonsStream::~KPadTrickButtonsStream() {}
+
+KPadDirectionButtonsStream::~KPadDirectionButtonsStream() {}
+
+void KPadWiiController::setDpdEnabled(bool enabled) {
+  if (enabled)
+    KPADEnableDPD(mChan);
+  else
+    KPADDisableDPD(mChan);
+}
+
+void KPadWiiController::updateBattery(int result) {
+  mOutOfBattery = false;
+  if (result == 0) {
+    mBattery = mWpadInfo.battery;
+  }
 }
 } // namespace System

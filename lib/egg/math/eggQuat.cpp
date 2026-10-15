@@ -66,6 +66,49 @@ float Quatf::squareNorm() {
   return axisSquareNorm() + w*w;
 }
 
+void Quatf::normalise() {
+  f32 sq = squareNorm();
+  if (sq > FLT_EPSILON) {
+    f32 len = sqrt(sq);
+    if (len > 0.0f) {
+      f32 inv = 1.0f / len;
+      w *= inv;
+      x *= inv;
+      y *= inv;
+      z *= inv;
+    }
+  }
+}
+
+void Quatf::setAxisRotation(const Vector3f& axis, f32 angle) {
+  f32 halfAngle = 0.5f * angle;
+  f32 cosHalf = cos(halfAngle);
+  f32 sinHalf = sin(halfAngle);
+
+  w = cosHalf;
+  z = sinHalf * axis.z;
+  y = sinHalf * axis.y;
+  x = sinHalf * axis.x;
+}
+
+Quatf Quatf::inverse() {
+  Quatf inv;
+  inv.x = -x;
+  inv.y = -y;
+  inv.z = -z;
+  inv.w = w;
+
+  f32 sq = squareNorm();
+  if (sq > 0.0f) {
+    f32 invSq = 1.0f / sq;
+    inv.x *= invSq;
+    inv.y *= invSq;
+    inv.z *= invSq;
+    inv.w *= invSq;
+  }
+  return inv;
+}
+
 void Quatf::slerpTo(const EGG::Quatf &q1, f32 t, EGG::Quatf &dst) const {
   f32 dot = x * q1.x + y * q1.y + z * q1.z + w * q1.w;
 

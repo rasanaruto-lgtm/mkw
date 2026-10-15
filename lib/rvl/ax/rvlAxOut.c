@@ -39,6 +39,28 @@ extern s16 __AXRmtOutBuffer[4][180] __attribute__((aligned(32)));
 s32 __AXRmtBuffLen;
 s32 __AXRmtDspPtr;
 s32 __AXRmtCpuPtr;
+
+s32 AXRmtGetSamplesLeft(void) {
+  s32 samples = __AXRmtDspPtr - 0x24;
+  if (samples < 0) {
+    samples += __AXRmtBuffLen;
+  }
+  samples -= __AXRmtCpuPtr;
+  if (samples < 0) {
+    samples += __AXRmtBuffLen;
+  }
+  return samples;
+}
+
+void __AXDSPRequestCallback() {}
+
+void __AXDSPInitCallback() { __AXDSPInitFlag = 1; }
+
+void __AXDSPDoneCallback() {
+  __AXDSPDoneFlag = 1;
+  OSWakeupThread(&__AXOutThreadQueue);
+}
+s32 __AXRmtCpuPtr;
 u32 __AXExceedCallback;
 
 extern u16 axDspInitVector;
